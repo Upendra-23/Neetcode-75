@@ -1,0 +1,24 @@
+class Solution {
+    bool fun(int row,int col,vector<vector<char>> &board){
+        char ch = board[row][col];
+        for(int i=0;i<9;i++){
+            if(board[i][col] == ch && i != row) return false;
+            if(board[row][i] == ch && i != col) return false;
+            int l = 3*(row/3)+i/3;
+            int m = 3*(col/3)+i%3;
+            if(board[l][m] == ch && l != row && m != col) return false;
+        }
+        return true;
+    }
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if(board[i][j] == '.') continue;
+                if(!fun(i,j,board))
+                    return false;
+            }
+        }
+        return true;
+    }
+};
