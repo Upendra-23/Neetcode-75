@@ -1,0 +1,47 @@
+class DisjointSet {
+public:
+    vector<int> parent,size;
+    DisjointSet(int n){
+        parent.resize(n+1);
+        size.resize(n+1);
+        for(int i=0;i<=n;i++){
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUpar(int node){
+        if(parent[node] == node)
+            return node;
+        return parent[node] = findUpar(parent[node]);
+    }
+
+    void unionBySize(int u,int v){
+        int ulp_u = findUpar(u);
+        int ulp_v = findUpar(v);
+        if(ulp_u == ulp_v) return;
+        if(size[ulp_u] > size[ulp_v]){
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+        else{
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        }
+    }
+};
+class Solution {
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        vector<int> ans;
+        DisjointSet ds(edges.size());
+        for(auto it:edges){
+            int u = it[0];
+            int v = it[1];
+            if(ds.findUpar(u) != ds.findUpar(v))
+                ds.unionBySize(u,v);
+            else ans = it;
+        }      
+        return ans;
+    }
+};
