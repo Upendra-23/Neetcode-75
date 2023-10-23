@@ -1,0 +1,17 @@
+class Solution {
+    void fun(int ob,int cb,int n,string s,vector<string> &ans){
+        if(ob == n && cb == n){
+            ans.push_back(s);
+            return;
+        }
+        if(ob < n) fun(ob+1,cb,n,s+'(',ans);
+        if(cb < ob) fun(ob,cb+1,n,s+')',ans);
+    }
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> ans;
+        string s = "";
+        fun(0,0,n,s,ans);
+        return ans;
+    }
+};
