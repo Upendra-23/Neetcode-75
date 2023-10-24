@@ -1,0 +1,19 @@
+class Solution {
+public:
+    bool isHappy(int n) {
+        unordered_set<int> s;
+        s.insert(n);
+        while(n != 1){
+            int val = 0;
+            while(n){
+                int rem = n%10;
+                val += (rem * rem);
+                n /= 10;
+            }
+            if(s.find(val) != s.end()) return false;
+            s.insert(val);
+            n = val;
+        }
+        return true;
+    }
+};
