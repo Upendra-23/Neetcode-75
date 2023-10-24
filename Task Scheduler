@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        vector<int> mp(26,0);
+        for(auto it:tasks) mp[it-'A']++;
+        sort(mp.begin(),mp.end());
+        int chunks = mp[25]-1;
+        int idelcnt = chunks * n;
+        for(int i=24;i>=0;i--)
+            idelcnt -= min(chunks,mp[i]);
+        return idelcnt < 0 ? tasks.size() : idelcnt + tasks.size();
+    }
+};
