@@ -1,0 +1,62 @@
+class DisjointSet{
+public:
+
+    vector<int> parent,size;
+    
+    DisjointSet(int n){
+        parent.resize(n+1);
+        size.resize(n+1);
+        for(int i=0;i<=n;i++){
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+    
+    int findUpar(int node){
+        if(parent[node] == node) return node;
+        return parent[node] = findUpar(parent[node]);
+    }
+    
+    void unionBySize(int u,int v){
+        int ulp_u = findUpar(u);
+        int ulp_v = findUpar(v);
+        if(ulp_u == ulp_v) return;
+        if(size[ulp_u] > size[ulp_v]){
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+        else{
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        }
+    }
+};
+class Solution {
+    static bool comp(vector<int> &a,vector<int> &b){
+        return a[2] < b[2];
+    }
+public:
+    int minCostConnectPoints(vector<vector<int>>& points) {
+       vector<vector<int>> edges;
+       for(int i=0;i<points.size();i++){
+           for(int j=i+1;j<points.size();j++){
+               int xi = points[i][0], yi = points[i][1];
+               int xj = points[j][0], yj = points[j][1];
+               edges.push_back({i,j,abs(xi-xj)+abs(yi-yj)});
+           }
+       } 
+       sort(edges.begin(),edges.end(),comp);
+       DisjointSet ds(points.size());
+       int cost = 0;
+       for(auto it:edges){
+           int u = it[0];
+           int v = it[1];
+           int wt = it[2];
+           if(ds.findUpar(u) != ds.findUpar(v)) {
+                ds.unionBySize(u,v);
+                cost += wt;
+           }
+       }
+       return cost;
+    }  
+};
